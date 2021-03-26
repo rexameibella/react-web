@@ -1,0 +1,48 @@
+image: node:alpine
+
+stages:
+- deploy-staging
+- deploy-dev
+
+deploy-staging:
+  stage: deploy-staging
+  only:
+  - staging
+  before_script:
+  - 'which ssh-agent || ( apk add --update openssh )'
+
+  - apk add --update bash
+  - apk add --update git
+
+  - eval $(ssh-agent -s)
+
+  - mkdir -p ~/.ssh
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+  - mkdir -p ~/.ssh && chmod 700 ~/.ssh
+  - echo "$SSH_PRIVATE_KEY_STAGING" | tr -d '\r' | ssh-add - > /dev/null
+  - echo "$SSH_PUBLIC_KEY_STAGING" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+  script:
+  - npm i -g pm2
+  - pm2 deploy deploy/ecosystem-staging.config.js staging
+
+deploy-dev:
+  stage: deploy-dev
+  only:
+  - development
+  before_script:
+  - 'which ssh-agent || ( apk add --update openssh )'
+
+  - apk add --update bash
+  - apk add --update git
+
+  - eval $(ssh-agent -s)
+
+  - mkdir -p ~/.ssh
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+  - echo "$SSH_PRIVATE_KEY_DEV" | tr -d '\r' | ssh-add - > /dev/null
+  - echo "$SSH_PUBLIC_KEY_DEV" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+  script:
+  - npm i -g pm2
+  - pm2 deploy deploy/ecosystem-development.config.js development
