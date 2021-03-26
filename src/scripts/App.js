@@ -145,7 +145,7 @@ const App = () => {
       <div style={{ padding: '10px 15px 15px 15px' }}>
         <Grid container spacing={1} style={{ textAlign: 'center' }}>
           <Grid item xs={12} sm={12}>
-            <img src={state.UserProfilePicture && state.UserProfilePicture.trim() !== '' ? state.UserProfilePicture : 'https://finfleet-erp.s3-ap-southeast-1.amazonaws.com/photo-default.png'} style={{ width: '80px', height: '80px', borderRadius: '40px', marginBottom: '15px' }} />
+            <img src={state.UserProfilePicture && state.UserProfilePicture.trim() !== '' ? state.UserProfilePicture : 'https://upload.wikimedia.org/wikipedia/en/9/95/Test_image.jpg'} style={{ width: '80px', height: '80px', borderRadius: '40px', marginBottom: '15px' }} />
             <div style={{ marginLeft: '1px' }}>
               <span style={{ fontSize: '14px' }}><b>{state.UserFirstName && state.UserLastName ? state.UserFirstName + ' ' + state.UserLastName : state.UserFirstName ? state.UserFirstName : '-------'}</b></span><br />
               <span style={{ fontSize: '13px' }}>{state.UserEmail ? state.UserEmail : '-------'}</span><br />
